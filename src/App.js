@@ -25,14 +25,12 @@ class App extends Component {
   handleUpdate = async post => {
     post.title = "UPDATED";
 
-    //for update whole object
     const { data } = await axios.put(apiEndpoint + "/" + post.id, post);
 
-    //for update specific object property
-    const { data } = await axios.patch(apiEndpoint + "/" + post.id, {
-      title: post.title,
-      body: post.body
-    });
+    const posts = [...this.state.posts];
+    const index = posts.indexOf(post);
+    posts[index] = { ...post };
+    this.setState({ posts });
   };
 
   handleDelete = post => {
