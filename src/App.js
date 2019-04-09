@@ -43,6 +43,18 @@ class App extends Component {
       await axios.delete(apiEndpoint + "/" + post.id);
       //throw new Error("");
     } catch (ex) {
+
+      // ex.request
+      // ex.response
+      //
+      //
+      //Expected(404:not found, 400: bad request)- ClIENT ERRORS
+      //  -Display a specific error message.
+      //
+      //Unexpected(Network down,server down,db down,bug)
+      //  -Log them
+      //  -Display a generic and friendly error message.
+
       alert("Something failed while deleting a post!");
       this.setState({ posts: originalPost });
     }
