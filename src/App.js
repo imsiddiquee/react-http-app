@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { ToastContainer } from "react-toastify";
 import http from "./services/httpService";
 import config from "./config.json";
+import logger from "./services/logService";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
@@ -41,11 +42,12 @@ class App extends Component {
     this.setState({ posts });
 
     try {
-      await http.delete("s" + config.apiEndpoint + "/" + post.id);
+      await http.delete(config.apiEndpoint + "/" + post.id);
       //throw new Error("");
     } catch (ex) {
       if (ex.response && ex.response.status === 404) {
-        alert("This post has already been deleted.");
+        //alert("This post has already been deleted.");
+        logger.log("This post has already been deleted.");
       }
       this.setState({ posts: originalPost });
     }
