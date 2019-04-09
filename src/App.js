@@ -4,6 +4,20 @@ import "./App.css";
 
 const apiEndpoint = "https://jsonplaceholder.typicode.com/posts";
 
+axios.interceptors.response.use(null, error => {
+  const expectedError =
+    error.response &&
+    error.response.status >= 400 &&
+    error.response.status < 500;
+
+  if (!expectedError) {
+    console.log("Logging the error", error);
+    alert("An unexpected error occurred.");
+  }
+
+  return Promise.reject(error);
+});
+
 class App extends Component {
   state = {
     posts: []
@@ -43,19 +57,8 @@ class App extends Component {
       await axios.delete(apiEndpoint + "/" + post.id);
       //throw new Error("");
     } catch (ex) {
-
-      // ex.request
-      // ex.response
-      //
-      //
-      //Expected(404:not found, 400: bad request)- ClIENT ERRORS
-      //  -Display a specific error message.
-      //
-      //Unexpected(Network down,server down,db down,bug)
-      //  -Log them
-      //  -Display a generic and friendly error message.
-
-      alert("Something failed while deleting a post!");
+      if (ex.response && ex.response.state === 404)
+        alert("This post has already been deleted.");
       this.setState({ posts: originalPost });
     }
 
